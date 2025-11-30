@@ -1,6 +1,6 @@
 //
 //  AttributedStringView.swift
-//  Playground
+//  Playgrounds
 //
 //  Created by Madoka Suzuki on 2025/11/30.
 //
