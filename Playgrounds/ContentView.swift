@@ -22,6 +22,11 @@ struct ContentView: View {
                         NavigationTransitionView()
                     }
                 }
+                Section("Menu") {
+                    NavigationLink("ContextMenu") {
+                        ContextMenuView()
+                    }
+                }
             }
             .navigationTitle("Playgrounds")
         }
