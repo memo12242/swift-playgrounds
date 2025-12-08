@@ -16,6 +16,9 @@ struct ContentView: View {
                     NavigationLink("AttributedString") {
                         AttributedStringView()
                     }
+                    NavigationLink("LinkText") {
+                        LinkTextView()
+                    }
                 }
                 Section("Animation") {
                     NavigationLink("NavigationTransition") {
