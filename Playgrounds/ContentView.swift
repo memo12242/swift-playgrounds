@@ -33,6 +33,9 @@ struct ContentView: View {
                         ContextMenuView()
                     }
                 }
+                NavigationLink("ControlGroup") {
+                    ControlGroupView()
+                }
             }
             .navigationTitle("Playgrounds")
         }
