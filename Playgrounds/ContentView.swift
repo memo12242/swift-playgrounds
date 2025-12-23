@@ -26,6 +26,9 @@ struct ContentView: View {
                     }
                 }
                 Section("Menu") {
+                    NavigationLink("Menu") {
+                        MenuView()
+                    }
                     NavigationLink("ContextMenu") {
                         ContextMenuView()
                     }
