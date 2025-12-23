@@ -20,12 +20,9 @@ struct MenuView: View {
         Menu {
             ControlGroup {
                 Label("A", systemImage: "rectangle.3.group")
-                Label ("B"
-                       , systemImage: "rectangle.3.group")
-                Label ("C"
-                       , systemImage: "rectangle.3.group")
-                Label("D", systemImage:
-                        "rectangle.3.group")
+                Label("B", systemImage: "rectangle.3.group")
+                Label("C", systemImage: "rectangle.3.group")
+                Label("D", systemImage: "rectangle.3.group")
             }
             Label("a", systemImage: "list.bullet")
             Label("b", systemImage: "list.bullet")
