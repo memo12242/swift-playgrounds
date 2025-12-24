@@ -36,6 +36,11 @@ struct ContentView: View {
                         ControlGroupView()
                     }
                 }
+                Section("Utility") {
+                    NavigationLink("IPAdress") {
+                        IPAdressView()
+                    }
+                }
             }
             .navigationTitle("Playgrounds")
         }
