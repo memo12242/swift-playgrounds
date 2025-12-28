@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct IPAdressView: View {
+    @State var globalIPv4: String?
+    @State var globalIPv6: String?
+    
     var body: some View {
         List {
             HStack {
@@ -15,6 +18,32 @@ struct IPAdressView: View {
                 Spacer()
                 Text(getLocalIPv4Address() ?? "not found")
                     .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+            }
+            HStack {
+                Text("Global IP Adress v4")
+                Spacer()
+                Text(globalIPv4 ?? "not found")
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+            }
+            HStack {
+                Text("Global IP Adress v6")
+                Spacer()
+                Text(globalIPv6 ?? "not found")
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+            }
+        }
+        .navigationTitle("IP Adress")
+        .onAppear {
+            Task {
+                do {
+                    globalIPv4 = try await fetchGlobalIPv4Adress()
+                    globalIPv6 = try await fetchGlobalIPv6Adress()
+                } catch {
+                    print(error)
+                }
             }
         }
     }
@@ -61,6 +90,19 @@ struct IPAdressView: View {
         }
         
         return best
+    }
+    
+    
+    func fetchGlobalIPv4Adress() async throws -> String {
+        let url = URL(string: "https://api.ipify.org")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return String(decoding: data, as: UTF8.self)
+    }
+    
+    func fetchGlobalIPv6Adress() async throws -> String {
+        let url = URL(string: "https://api64.ipify.org")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return String(decoding: data, as: UTF8.self)
     }
 }
 

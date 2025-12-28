@@ -24,6 +24,9 @@ struct ContentView: View {
                     NavigationLink("NavigationTransition") {
                         NavigationTransitionView()
                     }
+                    NavigationLink("TextAnimation") {
+                        TextAnimationView()
+                    }
                 }
                 Section("Menu") {
                     NavigationLink("Menu") {
