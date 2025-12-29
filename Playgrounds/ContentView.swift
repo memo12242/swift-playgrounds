@@ -39,6 +39,14 @@ struct ContentView: View {
                         ControlGroupView()
                     }
                 }
+                Section("Other") {
+                    NavigationLink("Tab") {
+                        TabSampleView()
+                    }
+                    NavigationLink("Clock") {
+                        ClockView()
+                    }
+                }
                 Section("Utility") {
                     NavigationLink("IPAdress") {
                         IPAdressView()
