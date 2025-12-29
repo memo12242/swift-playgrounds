@@ -9,36 +9,54 @@ import SwiftUI
 
 struct ClockView: View {
     @State var showMs: Bool = false
+    @State var hold: Bool = false
+    
     var body: some View {
-        VStack(spacing: 32) {
-            Spacer()
-            TimelineView(.periodic(from: .now, by: 0.01)) { context in
-                VStack(spacing: 16) {
-                    Text(dateFormatter(date: context.date, part: .day))
-                        .font(.title2)
+        TimelineView(.periodic(from: .now, by: 0.01)) { context in
+            VStack(spacing: 16) {
+                Text(dateFormatter(date: context.date, part: .day))
+                    .font(.title2)
+                    .monospaced()
+                HStack(alignment: .bottom) {
+                    Text(dateFormatter(date: context.date, part: .time))
+                        .font(.largeTitle)
                         .monospaced()
-                    HStack(alignment: .bottom) {
-                        Text(dateFormatter(date: context.date, part: .time))
-                            .font(.largeTitle)
-                            .monospaced()
-                        HStack(spacing: 0) {
-                            Text(dateFormatter(date: context.date, part: .second))
-                            if showMs {
-                                Text("." + dateFormatter(date: context.date, part: .ms))
-                            }
+                    HStack(spacing: 0) {
+                        Text(dateFormatter(date: context.date, part: .second))
+                        if showMs {
+                            Text("." + dateFormatter(date: context.date, part: .ms))
                         }
-                        .font(.title)
-                        .monospaced()
-                        .offset(y: -1)
-                        .foregroundStyle(.secondary)
                     }
+                    .font(.title)
+                    .monospaced()
+                    .offset(y: -1)
+                    .foregroundStyle(.secondary)
                 }
             }
-            Toggle(isOn: $showMs) {
-                Text("ms")
+        }
+        .animation(.default, value: showMs)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Toggle(isOn: $showMs) {
+                        Text("Show ms")
+                    }
+                    Toggle(isOn: $hold) {
+                        Text("Keep Screen On")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
             }
-            .frame(width: 100)
-            Spacer()
+        }
+        .onAppear {
+            UIApplication.shared.isIdleTimerDisabled = hold
+        }
+        .onChange(of: hold) { _, newValue in
+            UIApplication.shared.isIdleTimerDisabled = newValue
+        }
+        .onDisappear {
+            UIApplication.shared.isIdleTimerDisabled = false
         }
     }
     
@@ -65,5 +83,7 @@ struct ClockView: View {
 }
 
 #Preview {
-    ClockView()
+    NavigationStack {
+        ClockView()
+    }
 }
