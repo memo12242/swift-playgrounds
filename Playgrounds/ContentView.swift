@@ -40,11 +40,17 @@ struct ContentView: View {
                     }
                 }
                 Section("Other") {
+                    NavigationLink("ConfirmDialog") {
+                        ConfirmDialogView()
+                    }
                     NavigationLink("Tab") {
                         TabSampleView()
                     }
                     NavigationLink("Clock") {
                         ClockView()
+                    }
+                    NavigationLink("CustomSideBar") {
+                        CustomSideBarView()
                     }
                 }
                 Section("Utility") {
