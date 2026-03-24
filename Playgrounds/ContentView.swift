@@ -39,6 +39,11 @@ struct ContentView: View {
                         ControlGroupView()
                     }
                 }
+                Section("List") {
+                    NavigationLink("ModernUICollectionView") {
+                        ModernUICollectionView()
+                    }
+                }
                 Section("Other") {
                     NavigationLink("ConfirmDialog") {
                         ConfirmDialogView()
