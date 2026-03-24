@@ -48,15 +48,20 @@ struct CustomSideBarView: View {
         ZStack(alignment: .leading) {
             sidebar
                 .frame(width: sidebarWidth)
+                .offset(x: contentOffsetX - sidebarWidth)
             ZStack {
                 ZStack {
                     Color(.systemBackground).ignoresSafeArea(.all)
                     content
+                        .disabled(contentOffsetX > .zero)
                 }
                 Color.black.ignoresSafeArea(.all)
                     .opacity(contentOffsetX == 0 ? 0 : 0.4 * expandedProportion)
             }
             .offset(x: contentOffsetX)
+            .onTapGesture {
+                close()
+            }
             .gesture(dragGesture)
             VStack(alignment: .leading) {
                 Spacer()
@@ -87,9 +92,9 @@ struct CustomSideBarView: View {
                 Button {
                     withAnimation {
                         if contentOffsetX == sidebarWidth {
-                            contentOffsetX = 0
+                            close()
                         } else {
-                            contentOffsetX = sidebarWidth
+                            open()
                         }
                     }
                 } label: {
@@ -113,21 +118,41 @@ struct CustomSideBarView: View {
     
     var sidebar: some View {
         VStack {
-            Text("SideBar")
+            HStack {
+                Text("SideBar")
+                Spacer()
+            }
             Spacer()
         }
+        .padding()
     }
     
     func endDragGuesture() {
-        withAnimation {
-            if isNearExpanded {
+        if isNearExpanded {
+            withAnimation {
                 contentOffsetX = sidebarWidth
-                isPreviousExpanded = true
-            } else {
-                contentOffsetX = .zero
-                isPreviousExpanded = false
             }
+            isPreviousExpanded = true
+        } else {
+            withAnimation {
+                contentOffsetX = .zero
+            }
+            isPreviousExpanded = false
         }
+    }
+    
+    func open() {
+        withAnimation {
+            contentOffsetX = sidebarWidth
+        }
+        isPreviousExpanded = true
+    }
+    
+    func close() {
+        withAnimation {
+            contentOffsetX = .zero
+        }
+        isPreviousExpanded = false
     }
 }
 
