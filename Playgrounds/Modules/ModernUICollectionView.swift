@@ -89,9 +89,14 @@ struct ModernUICollectionViewRepresentable: UIViewRepresentable {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
         let cellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, String> { cell, indexPath, itemIdentifier in
-            var content = cell.defaultContentConfiguration()
-            content.text = itemIdentifier
-            cell.contentConfiguration = content
+            cell.contentConfiguration = UIHostingConfiguration {
+                HStack {
+                    Image(systemName: "star")
+                        .foregroundStyle(.yellow)
+                    Text(itemIdentifier)
+                    Spacer()
+                }
+            }
         }
         
         let dataSource = UICollectionViewDiffableDataSource<Int, String>(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
