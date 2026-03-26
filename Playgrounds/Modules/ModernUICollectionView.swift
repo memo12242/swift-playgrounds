@@ -13,7 +13,7 @@ class ModernUICollectionViewModel: ObservableObject {
     @Published var isDragging: Bool = false
     
     func addItem() {
-        let newItem = "追加アイテム \(Int.random(in: 100...999))"
+        let newItem = "追加アイテム \(UUID())"
         items.append(newItem)
     }
     
