@@ -10,6 +10,7 @@ import Combine
 
 class ModernUICollectionViewModel: ObservableObject {
     @Published var items: [String] = ["アイテム 1", "アイテム 2", "アイテム 3"]
+    @Published var isDragging: Bool = false
     
     func addItem() {
         let newItem = "追加アイテム \(Int.random(in: 100...999))"
@@ -33,17 +34,21 @@ struct ModernUICollectionView: View {
         ZStack {
             ModernUICollectionViewRepresentable(
                 items: vm.items,
+                isDragging: $vm.isDragging,
                 onDelete: { itemToDelete in
                     vm.deleteItem(itemToDelete)
                 }
             )
             .ignoresSafeArea()
-            VStack {
-                Spacer()
+        }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("isDragging: \(vm.isDragging.description)")
+            }
+            ToolbarItem(placement: .bottomBar) {
                 Button("追加") {
                     vm.addItem()
                 }
-                .padding()
             }
         }
     }
@@ -52,15 +57,36 @@ struct ModernUICollectionView: View {
 
 struct ModernUICollectionViewRepresentable: UIViewRepresentable {
     var items: [String]
+    @Binding var isDragging: Bool
     var onDelete: ((String) -> Bool)
     
-    class Coordinator: NSObject {
+    class Coordinator: NSObject, UICollectionViewDelegate, UIScrollViewDelegate {
+        var parent: ModernUICollectionViewRepresentable
         var dataSource: UICollectionViewDiffableDataSource<Int, String>?
         var onDelete: ((String) -> Bool)?
+        
+        init(parent: ModernUICollectionViewRepresentable) {
+            self.parent = parent
+        }
+        
+        func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+            DispatchQueue.main.async {
+                self.parent.isDragging = true
+            }
+        }
+        
+        func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+            DispatchQueue.main.async {
+                self.parent.isDragging = false
+            }
+        }
+        
+        func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        }
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator()
+        Coordinator(parent: self)
     }
     
     func makeUIView(context: Context) -> UICollectionView {
@@ -104,6 +130,7 @@ struct ModernUICollectionViewRepresentable: UIViewRepresentable {
         }
         
         context.coordinator.dataSource = dataSource
+        collectionView.delegate = context.coordinator
         
         return collectionView
     }
@@ -125,5 +152,7 @@ struct ModernUICollectionViewRepresentable: UIViewRepresentable {
 }
 
 #Preview {
-    ModernUICollectionView()
+    NavigationStack {
+        ModernUICollectionView()
+    }
 }
